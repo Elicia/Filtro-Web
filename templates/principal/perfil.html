@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block titulo %}
+	{{usuario}}
+{% endblock titulo %}
+
+{% block contenido %}
+	<p>Bienvenida {{usuario.username|upper}} al curso profesional de Django 1.6 </p>
+	<p>Email: {{usuario.email}}</p>
+
+{% endblock contenido %}
