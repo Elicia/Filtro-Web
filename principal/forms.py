@@ -30,9 +30,6 @@ class EditarUserFormUser(ModelForm):
         model = User
         exclude = ("is_staff","is_active","is_superuser","last_login", "groups", "user_permissions", "date_joined", 'password', 'password1', 'password2')
 
-class PerfilForm(ModelForm):
-	class Meta:
-		model=PerfilUsuario
 
 class EditarPerfilForm(ModelForm):
     class Meta:

@@ -3,10 +3,11 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate, logout
 from django.shortcuts import render
-from principal.forms import RegistrarUsuarioForm, PerfilForm, EditarUserFormAdm, EditarUserFormUser,EditarPerfilForm
+from principal.forms import RegistrarUsuarioForm, EditarUserFormAdm, EditarUserFormUser,EditarPerfilForm
 from django.contrib.auth.decorators import login_required
 from django.views.generic.edit import FormView
 from braces.views import *
+from .models import *
 
 class RegistrarUsuario(FormView):
     template_name = 'principal/nuevo-usuario.html'
@@ -58,4 +59,35 @@ class UsuarioDetailView(LoginRequiredMixin,DetailView):
 
 
 class IndexAboutView(TemplateView):
-    template_name = "base.html"
+    template_name = "principal/index.html"
+
+
+class VerPerfiles(LoginRequiredMixin,TemplateView):
+	login_url = '/'
+
+	def get(self, request, *args, **kwargs):
+		perfiles = PerfilUsuario.objects.filter(usuario=request.user.id)
+		tags = Tag.objects.all()
+		usuario=request.user.username
+		return render(request,'principal/ver_perfiles.html',{'usuario':usuario,'perfiles':perfiles,'tags':tags})
+
+class NuevoPerfil(TemplateView):
+
+    def get(self, request, *args, **kwargs):
+		usuario=request.user
+		return render(request,'principal/nuevoperfil.html',{'usuario':usuario})
+
+
+# @login_required(login_url='/')
+# def nuevo_perfil(request, id_usuario):	
+# 	dato = User.objects.get(pk=id_usuario)
+# 	#date_now=datetime.datetime.now()
+# 	if request.method=='POST':
+# 		formulario=PerfilForm(request.POST)
+# 		if formulario.is_valid():
+# 			formulario.save()
+# 			return HttpResponseRedirect('/usuarios/%s/perfiles' %id_usuario)
+# 	else: 
+# 		formulario=PerfilForm()
+# 	return render_to_response('nuevoperfil.html',{'formulario':formulario, 'dato':dato}, context_instance=RequestContext(request))
+

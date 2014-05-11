@@ -1,0 +1,32 @@
+{% load static from staticfiles %}
+<form action="" id='formulario' method='post' >
+
+
+		<label for="id_nombre">Nombre:</label>					
+		<br><br>				
+		<input type="text" name="nombre" id="id_nombre" />		
+		<br><br>
+		<label for="id_tags">Tags:</label>					
+		<br><br>
+		<input type="text" value="Amsterdam,Washington" data-role="tagsinput" placeholder="Add tags" />
+		<br><br>	
+		<input type="hidden" name="usuario" id="id_usuario" value="{{usuario.id}}" />
+		<button class="btn" data-dismiss="modal" aria-hidden="true">Salir</button>
+		<button class="btn btn-primary">Registrar Perfil</button>
+
+</form>
+
+<style type="text/css">
+	#formulario {
+		
+		top: 0;
+		left: 0;
+		padding: 30px;
+
+	}
+</style>
+<link rel="stylesheet" href="{% static 'css/bootstrap-tagsinput.css' %}">
+<script src="http://code.jquery.com/jquery-1.9.0.min.js"></script>
+<script src="{% static 'js/vendor/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/bootstrap-tagsinput.js' %}"></script>
+

@@ -30,6 +30,7 @@
         <link rel="stylesheet" type="text/css" href="{% static 'css/normalize.css' %}">
   
         <link rel="stylesheet" href="{% static 'css/bootstrap-editable.css' %}"> 
+        <link rel="stylesheet" href="{% static 'css/bootstrap-tagsinput.css' %}">
     </head>
     <body>
         <!--[if lt IE 7]>
@@ -47,6 +48,7 @@
                 <ul class="nombre">
                     <li><a id="nombre" href="{% url 'detalle_usuario' user.id %}">Hola {{user.username|capfirst}}</a></li>
                     <li><a id="cerrar" href="{% url 'cerrar' %}">Cerrar &raquo;</a></li>
+                    <li><a id="cerrar" href="{% url 'perfiles' %}">Perfiles &raquo;</a></li>
                 </ul>                        
                 {% else %}
                          <form action="{% url 'my_login' %}" class="navbar-form navbar-right"  method='post'>
@@ -73,7 +75,7 @@
   
     <div class="container">
       <!-- Example row of columns -->
-      <h1>Buscar en:</h1>
+      <h2>Buscar como: (Colocar perfiles)</h2>
       {% block contenido %}{% endblock %}
       <hr>
 
@@ -88,6 +90,7 @@
         <script src="{% static 'js/vendor/bootstrap.min.js' %}"></script>
 
         <script src="{% static 'js/main.js' %}"></script>
+        <script src="{% static 'js/bootstrap-tagsinput.js' %}"></script>
         
     </body>
 </html>
