@@ -103,25 +103,20 @@ def ajax_nuevo_perfil(request):
 	
 
 def ajax_busqueda(request):
-	print "ahahaha"
 	palabra_buscar = request.GET['palabra_buscar']
-	print palabra_buscar
-	# paginas_web = PwPclave.objects.filter(palabra_clave__nombre=palabra_buscar).order_by('pagina_web__orden_google')
-	# print paginas_web
 
-	pg = PalabraClave.objects.get(nombre=palabra_buscar)
-	pg1 =pg.pwpclave_set.all().order_by('pagina_web__orden_google')
+	try:
+		pg = PalabraClave.objects.get(nombre=palabra_buscar)
+		pg1 =pg.pwpclave_set.all().order_by('pagina_web__orden_google')
+		ctx = {}	
+		for a in pg1:
+			print a.pagina_web.titulo
+			ctx[a.pagina_web] = a.pagina_web.titulo	
+		data = serializers.serialize('json', ctx,  fields=('titulo','contenido'))
 
-	print pg1
-	
-	ctx = {}	
-		
-	for a in pg1:
-		print a.pagina_web.titulo
-		ctx[a.pagina_web] = a.pagina_web.titulo	
-	print ctx	
-	data = serializers.serialize('json', ctx,  fields=('titulo','contenido'))
-	print data
+	except :
+		data = False
+		print data
 	return HttpResponse(data, mimetype="application/json")
 
 
@@ -132,12 +127,13 @@ class PaginaWebDetail(DetailView):
 
 	def get(self, request, *args, **kwargs):
 		get = super(PaginaWebDetail, self).get(request, *args,**kwargs)
-		print request.user.is_authenticated
 		if request.user.is_authenticated():
-			usu_pw=UsuarioPagWeb()
-			usu_pw.usuario=request.user
-			paginaweb=PaginaWeb.objects.get(id=kwargs['pk'])
-			usu_pw.pagina_web=paginaweb
-			usu_pw.save()
+			ver_si=UsuarioPagWeb.objects.filter(usuario=request.user.id,pagina_web=kwargs['pk']).count()
+			if ver_si ==0:
+				usu_pw=UsuarioPagWeb()
+				usu_pw.usuario=request.user
+				paginaweb=PaginaWeb.objects.get(id=kwargs['pk'])
+				usu_pw.pagina_web=paginaweb
+				usu_pw.save()
 		return get
 

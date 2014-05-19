@@ -43,24 +43,22 @@
             url:"/ajax_busqueda/",
             success: function(data)
             { 
-              console.log(data)
-
-               html = "";
+              html = "";
               for(i=0;i < data.length;i++)
-              {
-               html += " <div id ='caja_dentro'>";
-               html += " <h3><a href='/paginas/"+data[i].pk+"/' %}' id='selec'>"+data[i].fields.titulo+"</a></h3>";
-               html += " <p>"+data[i].fields.contenido+"</p>";
-               html += "</div>";
-               }
+                {
+                 html += " <div id ='caja_dentro'>";
+                 html += " <h3><a href='/paginas/"+data[i].pk+"/' %}' id='selec'>"+data[i].fields.titulo+"</a></h3>";
+                  html += " <p>"+data[i].fields.contenido+"</p>";
+                 html += "</div>";
+                 }
 
-               $('#caja_fuera').html(html); 
-               },
+              $('#caja_fuera').html(html); 
+            },
             error:function()
             {
-              
-              }
-              });
+              $('#caja_fuera').html("No encontrado");  
+            }
+          });
      });
         
 
