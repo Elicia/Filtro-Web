@@ -1,6 +1,5 @@
 {% load static from staticfiles %}
-<form action="" id='formulario' method='post' >
-
+<form action="." id='formulario' method="POST">
 
 		<label for="id_nombre">Nombre:</label>					
 		<br><br>				
@@ -8,11 +7,12 @@
 		<br><br>
 		<label for="id_tags">Tags:</label>					
 		<br><br>
-		<input type="text" value="Amsterdam,Washington" data-role="tagsinput" placeholder="Add tags" />
+		<input type="text" value="Amsterdam,Washington" data-role="tagsinput" placeholder="Add tags" class="tags"/>
 		<br><br>	
-		<input type="hidden" name="usuario" id="id_usuario" value="{{usuario.id}}" />
 		<button class="btn" data-dismiss="modal" aria-hidden="true">Salir</button>
-		<button class="btn btn-primary">Registrar Perfil</button>
+		{% csrf_token %}
+		<input type="button" value="Registrar Perfil" class="btn btn-primary" id="registrar"> 
+
 
 </form>
 
@@ -30,3 +30,64 @@
 <script src="{% static 'js/vendor/bootstrap.min.js' %}"></script>
 <script src="{% static 'js/bootstrap-tagsinput.js' %}"></script>
 
+
+
+<script>
+var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
+            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g,s)}(document,'script'));
+		$(document).on("ready", setup);
+			  function setup()
+			  {
+				    $.ajaxSetup({
+				      beforeSend: function(xhr, settings) 
+					      {
+					        function getCookie(name) {
+					          var cookieValue = null;
+					            if (document.cookie && document.cookie != '') {
+					              var cookies = document.cookie.split(';');
+					                for (var i = 0; i < cookies.length; i++) {
+					                  var cookie = jQuery.trim(cookies[i]);
+					                  // Does this cookie string begin with the name we want?
+					                    if (cookie.substring(0, name.length + 1) == (name + '=')) {
+					                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+					                    break;
+					                    }
+					                }
+					            }
+					        return cookieValue;
+					        }
+					        if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+					      // Only send the token to relative URLs i.e. locally.
+					          xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+					        }
+					      }
+				    });
+			  }
+
+</script>
+
+<script>
+		 $("#registrar").click(function()
+		 {
+          nom_perfil = $('#id_nombre').val();
+          console.log(nom_perfil);
+          tags=$(".tags").val();
+          console.log(tags);
+           $.ajax({
+		        data:{'nom_perfil':nom_perfil},
+		        type:"POST",
+		        url:"/ajax_nuevo_perfil/",
+		        success: function(data)
+		        {
+		             console.log(data)
+		           },
+		        error:function()
+		        {
+		        	
+		          }
+		          });
+            });
+        
+</script>	

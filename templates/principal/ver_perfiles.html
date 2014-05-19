@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block contenido %}
-
+   <br><br><br>
 
   <div class="box-header" data-original-title>
     <h2><i class="icon-user"></i>Perfiles del usuario {{usuario}}</h2>
@@ -69,82 +69,6 @@
 {% endblock%}
 {% block script %}
 
-<script>
-$.fn.editable.defaults.mode = 'inline';
-
-
-$(document).on("ready", inicio);
-
-function inicio()
-{
-  $( "input[type=checkbox]" ).on( "change", evento);
-
-     $('.tipo').editable({      
-      source: [
-      {value: 'Operario', text: 'Operario'},
-      {value: 'Supervisor', text: 'Supervisor'},
-      {value: 'Administrador', text: 'Administrador'}
-      ]
-  });
-
-
-  $('.fecha_caducidad').editable({
-      format: 'yyyy-mm-dd',
-      viewformat: 'dd-mm-yyyy',       
-
-      validate: function(value)
-       {
-   
-       var day=value.getDate()+1;
-       var mes=value.getMonth()+1;
-       var anio=value.getFullYear();
-       if (day<10) day="0"+day;
-       if(mes<10) mes="0"+mes;
-       var fecha=anio+mes+day;
-
-       
-       var inicio=$(this).parent().children('.fechaReg').val();
-
-          if(fecha<inicio) 
-          {        
-
-          return 'No es posible!';           
-          
-        }
-      }
-    
-  });
-
-
-
-}
-
-
-
-function evento()
-{
-    var $checkbox1 = $(this);
-    var id_perfil = $(this).val();
-      $.ajax({
-        data:{id_perfil_edit:id_perfil},
-        type:"post",
-        url:'/edit_estado/',
-        success: function (data)
-        {
-          if (data=="False")
-          {
-            $checkbox1.parent().children('.mensaje').html('Inactivo');
-          }
-          else
-          {
-            $checkbox1.parent().children('.mensaje').html('Activo');
-          }
-        }
-      });
-    console.log(id_perfil);
-}
-
-</script>
 
 {% endblock %}
  

@@ -25,3 +25,37 @@ class Tag(models.Model):
 
 	def __unicode__(self):
 		return '%s y %s' %(self.perfil,self.nombre)
+
+
+class PaginaWeb(models.Model):
+	tipo_pagina = models.CharField(max_length=20)
+	orden_google = models.IntegerField()
+	idioma= models.CharField(max_length=20)
+	ubicacion= models.CharField(max_length=20)
+	titulo = models.CharField(max_length=20)
+	contenido = models.TextField()
+
+	def __unicode__(self):
+		return '%s y %s' %(self.titulo,self.orden_google)
+
+
+class PalabraClave(models.Model):
+	nombre = models.CharField(max_length=20)
+	def __unicode__(self):
+		return '%s' %(self.nombre)
+
+
+class PwPclave(models.Model):
+	pagina_web = models.ForeignKey(PaginaWeb)
+	palabra_clave = models.ForeignKey(PalabraClave)
+
+	def __unicode__(self):
+		return '%s y %s' %(self.pagina_web,self.palabra_clave)
+
+
+class UsuarioPagWeb(models.Model):
+	usuario =models.ForeignKey(User)
+	pagina_web = models.ForeignKey(PaginaWeb)
+
+	def __unicode__(self):
+		return '%s y %s' %(self.usuario,self.pagina_web)

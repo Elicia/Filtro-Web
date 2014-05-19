@@ -8,6 +8,9 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic.edit import FormView
 from braces.views import *
 from .models import *
+from django.http import HttpResponse, HttpResponseRedirect
+from django.http import Http404
+from django.core import serializers
 
 class RegistrarUsuario(FormView):
     template_name = 'principal/nuevo-usuario.html'
@@ -58,8 +61,12 @@ class UsuarioDetailView(LoginRequiredMixin,DetailView):
 	login_url = '/'
 
 
-class IndexAboutView(TemplateView):
-    template_name = "principal/index.html"
+class IndexAboutView(View):
+
+    def get(self, request, *args, **kwargs):
+		perfiles=PerfilUsuario.objects.filter(usuario=request.user.id)
+		paginas =PaginaWeb.objects.all().order_by('orden_google')
+		return render(request,'principal/index.html',{'perfiles':perfiles,'paginas':paginas})
 
 
 class VerPerfiles(LoginRequiredMixin,TemplateView):
@@ -74,20 +81,45 @@ class VerPerfiles(LoginRequiredMixin,TemplateView):
 class NuevoPerfil(TemplateView):
 
     def get(self, request, *args, **kwargs):
-		usuario=request.user
-		return render(request,'principal/nuevoperfil.html',{'usuario':usuario})
+		return render(request,'principal/nuevoperfil.html')
 
 
-# @login_required(login_url='/')
-# def nuevo_perfil(request, id_usuario):	
-# 	dato = User.objects.get(pk=id_usuario)
-# 	#date_now=datetime.datetime.now()
-# 	if request.method=='POST':
-# 		formulario=PerfilForm(request.POST)
-# 		if formulario.is_valid():
-# 			formulario.save()
-# 			return HttpResponseRedirect('/usuarios/%s/perfiles' %id_usuario)
-# 	else: 
-# 		formulario=PerfilForm()
-# 	return render_to_response('nuevoperfil.html',{'formulario':formulario, 'dato':dato}, context_instance=RequestContext(request))
+def ajax_nuevo_perfil(request):
+	print "buuuuuuuuuuuuuu"
+	if request.is_ajax():
+		print "es ajax"
+		
+		print "entro get"
+		nom_perfil =request.POST['nom_perfil']
+			# tags=request.POST['tags']
+		print nom_perfil
+			# print tags
+			# dato = serializers.serialize('json', libros)
+		data = True
+		return HttpResponse(data)
+	
+	else:
+		raise Http404
+	
 
+def ajax_busqueda(request):
+	print "ahahaha"
+	palabra_buscar = request.GET['palabra_buscar']
+	print palabra_buscar
+	# paginas_web = PwPclave.objects.filter(palabra_clave__nombre=palabra_buscar).order_by('pagina_web__orden_google')
+	# print paginas_web
+
+	pg = PalabraClave.objects.get(nombre=palabra_buscar)
+	pg1 =pg.pwpclave_set.all().order_by('pagina_web__orden_google')
+
+	print pg1
+	
+	ctx = {}	
+		
+	for a in pg1:
+		print a.pagina_web.titulo
+		ctx[a.pagina_web] = a.pagina_web.titulo	
+	print ctx	
+	data = serializers.serialize('json', ctx,  fields=('titulo','contenido'))
+	print data
+	return HttpResponse(data, mimetype="application/json")

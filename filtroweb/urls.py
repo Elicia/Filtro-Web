@@ -16,5 +16,9 @@ urlpatterns = patterns('',
     url(r'^nuevo/$', RegistrarUsuario.as_view(), name='nuevo'),
     url(r'^perfiles/$',VerPerfiles.as_view(), name='perfiles'),
 	url(r'^perfiles/nuevo$',NuevoPerfil.as_view(), name='nuevo_perfil'),	
+	url(r'^ajax_nuevo_perfil/$','principal.views.ajax_nuevo_perfil'),	
+    url(r'^ajax_busqueda/$','principal.views.ajax_busqueda'),
+
+	
 )
 
