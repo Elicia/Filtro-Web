@@ -123,3 +123,21 @@ def ajax_busqueda(request):
 	data = serializers.serialize('json', ctx,  fields=('titulo','contenido'))
 	print data
 	return HttpResponse(data, mimetype="application/json")
+
+
+class PaginaWebDetail(DetailView):
+	model = PaginaWeb
+	context_object_name = 'pw'
+	template_name = "principal/detalle_pagina.html"
+
+	def get(self, request, *args, **kwargs):
+		get = super(PaginaWebDetail, self).get(request, *args,**kwargs)
+		print request.user.is_authenticated
+		if request.user.is_authenticated():
+			usu_pw=UsuarioPagWeb()
+			usu_pw.usuario=request.user
+			paginaweb=PaginaWeb.objects.get(id=kwargs['pk'])
+			usu_pw.pagina_web=paginaweb
+			usu_pw.save()
+		return get
+

@@ -25,12 +25,7 @@
 
     <hr>
     <div id ="caja_fuera">
-<!--          {% for pagina in paginas %}
-          <div id ="caja_dentro">
-           		<h3>{{pagina.titulo}}<h3>
-           		<p>{{pagina.contenido}}</p>
-         	</div>
-       	{% endfor%} -->
+
     </div>
 
 {% endblock %}
@@ -54,7 +49,7 @@
               for(i=0;i < data.length;i++)
               {
                html += " <div id ='caja_dentro'>";
-               html += " <h3>"+data[i].fields.titulo+"</h3>";
+               html += " <h3><a href='/paginas/"+data[i].pk+"/' %}' id='selec'>"+data[i].fields.titulo+"</a></h3>";
                html += " <p>"+data[i].fields.contenido+"</p>";
                html += "</div>";
                }
@@ -68,5 +63,6 @@
               });
      });
         
+
   </script> 
  {% endblock %}

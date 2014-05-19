@@ -6,13 +6,14 @@ a {
   text-decoration: none;
 }
 
-#caja-fuera{
+div#caja_fuera{
 
 
 }
-#caja-dentro{
 
+div#caja_dentro{
 
+  background-color: #B9DEE2;
 }
 
 .nombre{
